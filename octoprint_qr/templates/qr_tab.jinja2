@@ -1,0 +1,55 @@
+<div id="tab_qrOverview">
+    <button title="Test" class="btn" data-bind="click: readQr"><i class="fa fa-barcode"></i>Scan QR</button>
+    <button title="asd" class="btn" data-bind="click: update"><i class="fa fa-sync-alt"></i>Renew</button>
+    <table class="table table-striped table-hover table-condensed table-hover" style="clear: both;">
+        <thead>
+            <tr>
+                <th style="width: 15%" >Display Name</th>
+                <th style="width: 15%" >Code</th>
+                <th style="width: 24%" >Gcode</th>
+                <th style="width: 15%" >Spool Manager Id</th>
+            </tr>
+        </thead>
+        <tbody data-bind="foreach: spoolDialog.spools" >
+            <tr data-bind="click: function() { $root.showSpoolDialogAction($data); }">
+            <td><span data-bind="text: displayName, attr: { title: code }"></span></td>
+            <td><span data-bind="text: code, attr: { title: code }"></span></td>
+            <td><span style="white-space: pre-line" data-bind="text: gcodeText, attr: { title: gcodeText }"></span></td>
+            <td><span data-bind="text: spoolManagerId, attr: { title: spoolManagerId }"></span></td>
+            </tr>
+        </tbody>
+    </table>
+    <div id="dialog_qr_edit" class="modal fade large">
+        <div class="modal-header">
+            <h4 class="modal-title" data-bind="text: title"></h4>
+            <div class="row">
+                <div class="span1">
+                    <label>
+                        <span data-bind="text: spoolDialog.selectedSpool.code()"></span>
+                    </label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="span1">
+                    <input data-bind="value: spoolDialog.selectedSpool.displayName()"></input>
+                </div>
+            </div>
+            <div class="row">
+                <div class="span1">
+                    <textarea data-bind="value: spoolDialog.selectedSpool.gcodeText()"></textarea>
+                </div>
+            </div>
+            <div class="row">
+                <div class="span1">
+                    <input id="text" type="text" data-bind="numeric, value: spoolDialog.selectedSpool.spoolManagerId()">
+                </div>
+            </div>
+            <div class="row">
+                <div class="span1">
+                    <button class="btn" data-dismiss="modal" style="text-align:right">Close</button>
+                    <button class="btn" data-dismiss="modal" data-bind="click: spoolDialog.saveSpool" style="text-align:right">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
