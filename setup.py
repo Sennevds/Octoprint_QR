@@ -33,7 +33,11 @@ plugin_url = "https://github.com/Sennevds/Octoprint_QR"
 plugin_license = "AGPLv3"
 
 # Any additional requirements besides OctoPrint should be listed here
-plugin_requires = []
+plugin_requires = [
+	"peewee",
+	"cv2",
+	"pyzbar"
+]
 
 ### --------------------------------------------------------------------------------------------------------------------
 ### More advanced options that you usually shouldn't have to touch follow after this point

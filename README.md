@@ -2,6 +2,9 @@
 
 **TODO:** Describe what your plugin does.
 
+## Prerequisites
+On linux you'll need to manually install the zbar shared library:
+sudo apt-get install libzbar0
 ## Setup
 
 Install via the bundled [Plugin Manager](https://docs.octoprint.org/en/master/bundledplugins/pluginmanager.html)
