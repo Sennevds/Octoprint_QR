@@ -17,4 +17,11 @@
             <input type="number" step="1" class="form-check-input" data-bind="value: pluginSettings.codeScanTimeout">
         </div>
     </div>
+
+    <div class="control-group" style="display: none;">
+        <label class="control-label">{{ _('Send to spoolmanager') }}</label>
+        <div class="controls">
+            <input type="checkbox" class="form-check-input" data-bind="checked: pluginSettings.sendToSpoolManager">
+        </div>
+    </div>
 </form>

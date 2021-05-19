@@ -55,7 +55,7 @@ class QRPlugin(QrManagerAPI,
     def get_settings_defaults(self):
         settings = dict()
         settings["selectedSpoolDatabaseId"] = None
-        settings["sendToSpoolManager"] = True
+        settings["sendToSpoolManager"] = False
         settings["useOctoprintCam"] = True
         settings["customCamUrl"] = None
         settings["codeScanTimeout"] = 300
