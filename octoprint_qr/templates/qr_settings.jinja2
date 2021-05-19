@@ -1,0 +1,20 @@
+<form id="settings_qr" class="form-horizontal">
+    <div class="control-group">
+        <label class="control-label">{{ _('Use Octoprint Cam') }}</label>
+        <div class="controls">
+            <input type="checkbox" class="form-check-input" data-bind="checked: pluginSettings.useOctoprintCam">
+        </div>
+    </div>
+    <div class="control-group" data-bind="visible: customCamUrlVisible">
+        <label class="control-label">{{ _('Custom webcam URL') }}</label>
+        <div class="controls">
+            <input type="text" class="form-check-input" data-bind="value: pluginSettings.customCamUrl">
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label">{{ _('Code scan timeout (seconds)') }}</label>
+        <div class="controls">
+            <input type="number" step="1" class="form-check-input" data-bind="value: pluginSettings.codeScanTimeout">
+        </div>
+    </div>
+</form>

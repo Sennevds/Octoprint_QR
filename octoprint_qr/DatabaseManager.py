@@ -4,9 +4,8 @@ import datetime
 import os
 import logging
 import shutil
-from peewee import *
-from playhouse.migrate import *
-from octoprint_qr.models.BaseModel import BaseModel
+from peewee import SqliteDatabase
+from playhouse.migrate import SqliteMigrator
 from octoprint_qr.models.QrModel import QrModel
 from octoprint_qr.models.PluginMetaDataModel import PluginMetaDataModel
 FORCE_CREATE_TABLES = False
@@ -140,13 +139,15 @@ class DatabaseManager(object):
             migrationFunctions[migrationMethodIndex]()
             pass
         pass
+
     def _upgradeFrom1To2(self):
         migrator = SqliteMigrator(self._database)
         migrate(
-            migrator.add_column('qr_qrmodel', 'displayName', QrModel.displayName),
-            migrator.add_column('qr_qrmodel', 'spoolManagerId', QrModel.spoolManagerId),
+            migrator.add_column('qr_qrmodel', 'displayName',
+                                QrModel.displayName),
+            migrator.add_column(
+                'qr_qrmodel', 'spoolManagerId', QrModel.spoolManagerId),
         )
-
 
     def _createDatabaseTables(self):
         self._logger.info("Creating new database tables for qr-plugin")
@@ -202,7 +203,7 @@ class DatabaseManager(object):
         self.showSQLLogging(self.sqlLoggingEnabled)
 
         connected = self.connectoToDatabase(sendErrorPopUp=False)
-        if (connected == True):
+        if (connected is True):
             self._createDatabase(FORCE_CREATE_TABLES)
             self.closeDatabase()
 
@@ -219,19 +220,19 @@ class DatabaseManager(object):
         backupCurrentDatabaseSettings = None
         try:
             # use provided databasesettings or default if not provided
-            if (databaseSettings != None):
+            if (databaseSettings is not None):
                 backupCurrentDatabaseSettings = self._databaseSettings
                 self._databaseSettings = databaseSettings
 
             succesfull = self.connectoToDatabase()
-            if (succesfull == False):
+            if (succesfull is False):
                 result = self.getCurrentErrorMessageDict()
         finally:
             try:
                 self.closeDatabase()
             except:
                 pass  # do nothing
-            if (backupCurrentDatabaseSettings != None):
+            if (backupCurrentDatabaseSettings is not None):
                 self._databaseSettings = backupCurrentDatabaseSettings
 
         return result
@@ -320,7 +321,7 @@ class DatabaseManager(object):
         self._logger.info("ReCreating Database")
 
         backupCurrentDatabaseSettings = None
-        if (databaseSettings != None):
+        if (databaseSettings is not None):
             backupCurrentDatabaseSettings = self._databaseSettings
             self._databaseSettings = databaseSettings
         try:
@@ -333,22 +334,22 @@ class DatabaseManager(object):
             self.closeDatabase()
         finally:
             # - restore database settings
-            if (backupCurrentDatabaseSettings != None):
+            if (backupCurrentDatabaseSettings is not None):
                 self._databaseSettings = backupCurrentDatabaseSettings
 
     # DATABASE OPERATIONS
 
     def _handleReusableConnection(self, databaseCallMethode, withReusedConnection, methodeNameForLogging, defaultReturnValue=None):
         try:
-            if (withReusedConnection == True):
-                if (self._isConnected == False):
+            if (withReusedConnection is True):
+                if (self._isConnected is False):
                     self._logger.error(
                         "Database not connected. Check database-settings!")
                     return defaultReturnValue
             else:
                 self.connectoToDatabase()
             return databaseCallMethode()
-        except Exception as e:
+        except Exception:
             errorMessage = "Database call error in methode " + methodeNameForLogging
             self._logger.exception(errorMessage)
 
@@ -367,7 +368,7 @@ class DatabaseManager(object):
     def loadDatabaseMetaInformations(self, databaseSettings=None):
 
         backupCurrentDatabaseSettings = None
-        if (databaseSettings != None):
+        if (databaseSettings is not None):
             backupCurrentDatabaseSettings = self._databaseSettings
         else:
             databaseSettings = self._databaseSettings
@@ -441,7 +442,8 @@ class DatabaseManager(object):
             result = None
             try:
                 result = QrModel.get(QrModel.code == qr)
-                self._logger.info(f"myQuery: {result} first object: {result.code}")
+                self._logger.info(
+                    f"myQuery: {result} first object: {result.code}")
             except QrModel.DoesNotExist:
                 pass
             return result
@@ -460,18 +462,18 @@ class DatabaseManager(object):
             with self._database.atomic() as transaction:  # Opens new transaction.
                 try:
                     databaseId = qrModel.databaseId
-                    if (databaseId != None):
+                    if (databaseId is not None):
                         # we need to update and we need to make sure nobody else modify the data
                         currentQrModel = self.loadQr(
                             databaseId, withReusedConnection)
-                        if (currentQrModel == None):
+                        if (currentQrModel is None):
                             self._passMessageToClient("error", "DatabaseManager",
                                                       "Could not update the Spool, because it is already deleted!")
-                            return                           
+                            return
                     qrModel.save()
                     databaseId = qrModel.databaseId
                     transaction.commit()
-                except Exception as e:
+                except Exception:
                     transaction.rollback()
                     self._logger.exception(
                         "Could not insert Spool into database")

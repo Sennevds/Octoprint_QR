@@ -1,6 +1,5 @@
 # coding=utf-8
 from __future__ import absolute_import
-from octoprint_qr.qr_engine.QrEngine import QrEngine
 from octoprint_qr.DatabaseManager import DatabaseManager
 from octoprint_qr.api.QrAPI import QrManagerAPI
 from octoprint.events import Events
@@ -17,7 +16,7 @@ import octoprint.plugin
 
 
 class QRPlugin(QrManagerAPI,
-                octoprint.plugin.SimpleApiPlugin,
+               octoprint.plugin.SimpleApiPlugin,
                octoprint.plugin.SettingsPlugin,
                octoprint.plugin.AssetPlugin,
                octoprint.plugin.TemplatePlugin,
@@ -53,12 +52,13 @@ class QRPlugin(QrManagerAPI,
                                     title=title,
                                     message=message))
 
-
-
     def get_settings_defaults(self):
         settings = dict()
         settings["selectedSpoolDatabaseId"] = None
         settings["sendToSpoolManager"] = True
+        settings["useOctoprintCam"] = True
+        settings["customCamUrl"] = None
+        settings["codeScanTimeout"] = 300
         return settings
 
     # ~~ AssetPlugin mixin
@@ -69,9 +69,9 @@ class QRPlugin(QrManagerAPI,
         # Define your plugin's asset files to automatically include in the
         # core UI here.
         return dict(
-            js=["js/qr.js","js/apiClient.js","js/spoolDialog.js"]
+            js=["js/qr.js", "js/apiClient.js", "js/spoolDialog.js"]
             )
-    
+
     def on_event(self, event, payload):
         if (Events.PRINT_STARTED == event):
             self._logger.info("print started")
@@ -98,24 +98,26 @@ class QRPlugin(QrManagerAPI,
                 pip="https://github.com/Sennevds/OctoPrint-QR/archive/{target_version}.zip"
             )
         )
+
     def get_template_configs(self):
         return [
-            dict(type="tab", name="Qr")
+            dict(type="tab", name="Qr"),
+            dict(type="settings")
         ]
 
     def on_after_startup(self):
         self._logger.info("Hello World!")
         self._logger.info(self._settings.global_get(["webcam", "stream"]))
 
-    def gcode_script_variables(self, comm, script_type, script_name, *args, **kwargs):
-        if not script_type == "gcode" or not script_name == "beforePrintStarted":
-            return None
+    # def gcode_script_variables(self, comm, script_type, script_name, *args, **kwargs):
+    #     if not script_type == "gcode" or not script_name == "beforePrintStarted":
+    #         return None
 
-        prefix = None
-        postfix = None
+    #     prefix = None
+    #     postfix = None
 
-        variables = dict(myvariable="")
-        return prefix, postfix, variables
+    #     variables = dict(myvariable="")
+    #     return prefix, postfix, variables
 
     def queuing_hook(self, comm, phase, cmd, cmd_type, gcode, *args, **kwargs):
         if cmd and cmd == "{{Custom_Command}}":
@@ -148,6 +150,5 @@ def __plugin_load__():
     global __plugin_hooks__
     __plugin_hooks__ = {
         "octoprint.plugin.softwareupdate.check_config": __plugin_implementation__.get_update_information,
-        "octoprint.comm.protocol.scripts": __plugin_implementation__.gcode_script_variables,
         "octoprint.comm.protocol.gcode.queuing": __plugin_implementation__.queuing_hook
     }
