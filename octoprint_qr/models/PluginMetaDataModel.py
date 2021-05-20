@@ -1,8 +1,9 @@
-# coding=utf-8
+# -*- coding: utf-8 -*-
 from __future__ import absolute_import
 
-from octoprint_qr.models.BaseModel import BaseModel
 from peewee import CharField
+
+from octoprint_qr.models.BaseModel import BaseModel
 
 
 class PluginMetaDataModel(BaseModel):

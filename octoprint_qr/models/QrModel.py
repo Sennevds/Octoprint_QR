@@ -1,6 +1,8 @@
-# coding=utf-8
+# -*- coding: utf-8 -*-
 from __future__ import absolute_import
-from peewee import CharField, TextField, IntegerField
+
+from peewee import CharField, IntegerField, TextField
+
 from octoprint_qr.models.BaseModel import BaseModel
 
 

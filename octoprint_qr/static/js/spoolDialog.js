@@ -5,16 +5,16 @@ function SpoolDialog() {
     self.apiClient = null;
     self.webcamUrl = ko.observable();
     self.spools = ko.observableArray();
-    self.showPopUp = function(popupType, popupTitle, message){
+    self.showPopUp = function (popupType, popupTitle, message) {
         var title = popupType.toUpperCase() + ": " + popupTitle;
-        var popupId = (title+message).replace(/([^a-z0-9]+)/gi, '-');
-        if($("."+popupId).length <1) {
+        var popupId = (title + message).replace(/([^a-z0-9]+)/gi, "-");
+        if ($("." + popupId).length < 1) {
             new PNotify({
                 title: title,
                 text: message,
                 type: popupType,
                 hide: false,
-                addclass: popupId
+                addclass: popupId,
             });
         }
     };
@@ -43,7 +43,7 @@ function SpoolDialog() {
         self.apiClient = apiClient;
         self.webcamUrl(webcamUrl);
         self.spoolDialog = $("#dialog_qr_edit");
-        self.scanDialog = $('#dialog_qr_scan');
+        self.scanDialog = $("#dialog_qr_scan");
         self.apiClient.callGetAllSpools(function (responseData) {
             var allSpoolItems = ko.utils.arrayMap(
                 responseData,
@@ -113,10 +113,9 @@ function SpoolDialog() {
                             return -($(this).width() / 2);
                         },
                     });
-            }else if(spoolItem.code() == null){
-                self.showPopUp("error", 'Timeout', 'No code was found!');
-            }
-             else {
+            } else if (spoolItem.code() == null) {
+                self.showPopUp("error", "Timeout", "No code was found!");
+            } else {
                 self.apiClient.callSelectQr(
                     spoolItem.databaseId,
                     function (responseData) {
@@ -126,7 +125,13 @@ function SpoolDialog() {
                         //     spoolItem = self.spoolDialog.createSpoolItemForTable(spoolData);
                         // }
                         // self.selectedSpoolForSidebar(spoolItem)
-                        self.showPopUp("info", 'Selected QR', 'Code: '+spoolItem.code()+' selected for printing');
+                        self.showPopUp(
+                            "info",
+                            "Selected QR",
+                            "Code: " +
+                                spoolItem.code() +
+                                " selected for printing"
+                        );
                     }
                 );
             }

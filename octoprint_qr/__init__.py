@@ -1,8 +1,11 @@
-# coding=utf-8
+# -*- coding: utf-8 -*-
 from __future__ import absolute_import
-from octoprint_qr.DatabaseManager import DatabaseManager
-from octoprint_qr.api.QrAPI import QrManagerAPI
+
+import octoprint.plugin
 from octoprint.events import Events
+
+from octoprint_qr.api.QrAPI import QrManagerAPI
+from octoprint_qr.DatabaseManager import DatabaseManager
 
 # (Don't forget to remove me)
 # This is a basic skeleton for your plugin's __init__.py. You probably want to adjust the class name of your plugin
@@ -12,16 +15,16 @@ from octoprint.events import Events
 #
 # Take a look at the documentation on what other plugin mixins are available.
 
-import octoprint.plugin
 
-
-class QRPlugin(QrManagerAPI,
-               octoprint.plugin.SimpleApiPlugin,
-               octoprint.plugin.SettingsPlugin,
-               octoprint.plugin.AssetPlugin,
-               octoprint.plugin.TemplatePlugin,
-               octoprint.plugin.StartupPlugin,
-               octoprint.plugin.EventHandlerPlugin):
+class QRPlugin(
+    QrManagerAPI,
+    octoprint.plugin.SimpleApiPlugin,
+    octoprint.plugin.SettingsPlugin,
+    octoprint.plugin.AssetPlugin,
+    octoprint.plugin.TemplatePlugin,
+    octoprint.plugin.StartupPlugin,
+    octoprint.plugin.EventHandlerPlugin,
+):
 
     # ~~ SettingsPlugin mixin
     def initialize(self):
@@ -30,34 +33,33 @@ class QRPlugin(QrManagerAPI,
         # DATABASE
         self.databaseConnectionProblemConfirmed = False
         sqlLoggingEnabled = False
-        self._databaseManager = DatabaseManager(
-            self._logger, sqlLoggingEnabled)
+        self._databaseManager = DatabaseManager(self._logger, sqlLoggingEnabled)
         databaseSettings = self._buildDatabaseSettingsFromPluginSettings()
 
         # init database
-        self._databaseManager.initDatabase(
-            databaseSettings, self._sendMessageToClient)
+        self._databaseManager.initDatabase(databaseSettings, self._sendMessageToClient)
         self.selectedSpool = self.loadSelectedSpool()
 
     def _buildDatabaseSettingsFromPluginSettings(self):
         databaseSettings = DatabaseManager.DatabaseSettings()
         pluginDataBaseFolder = self.get_plugin_data_folder()
         databaseSettings.baseFolder = pluginDataBaseFolder
-        databaseSettings.fileLocation = self._databaseManager.buildDefaultDatabaseFileLocation(databaseSettings.baseFolder)
+        databaseSettings.fileLocation = (
+            self._databaseManager.buildDefaultDatabaseFileLocation(
+                databaseSettings.baseFolder
+            )
+        )
         return databaseSettings
 
     def _sendDataToClient(self, payloadDict):
-        self._plugin_manager.send_plugin_message(self._identifier,
-                                                 payloadDict)
+        self._plugin_manager.send_plugin_message(self._identifier, payloadDict)
 
     def _sendMessageToClient(self, type, title, message):
-        self._logger.warning("SendToClient: " + type +
-                             "#" + title + "#" + message)
+        self._logger.warning("SendToClient: " + type + "#" + title + "#" + message)
         title = "SPM:" + title
-        self._sendDataToClient(dict(action="showPopUp",
-                                    type=type,
-                                    title=title,
-                                    message=message))
+        self._sendDataToClient(
+            dict(action="showPopUp", type=type, title=title, message=message)
+        )
 
     def get_settings_defaults(self):
         settings = dict()
@@ -75,15 +77,14 @@ class QRPlugin(QrManagerAPI,
     def get_assets(self):
         # Define your plugin's asset files to automatically include in the
         # core UI here.
-        return dict(
-            js=["js/qr.js", "js/apiClient.js", "js/spoolDialog.js"]
-            )
+        return dict(js=["js/qr.js", "js/apiClient.js", "js/spoolDialog.js"])
 
     def on_event(self, event, payload):
-        if (Events.PRINT_STARTED == event):
+        if Events.PRINT_STARTED == event:
             self._logger.info("print started")
             self.selectedSpool = self.loadSelectedSpool()
             return
+
     # ~~ Softwareupdate hook
 
     def get_update_information(self):
@@ -99,17 +100,13 @@ class QRPlugin(QrManagerAPI,
                 user="Sennevds",
                 repo="Octoprint_QR",
                 current=self._plugin_version,
-
                 # update method: pip
-                pip="https://github.com/Sennevds/OctoPrint_QR/archive/{target_version}.zip"
+                pip="https://github.com/Sennevds/OctoPrint_QR/archive/{target_version}.zip",
             )
         )
 
     def get_template_configs(self):
-        return [
-            dict(type="tab", name="Qr"),
-            dict(type="settings")
-        ]
+        return [dict(type="tab", name="Qr"), dict(type="settings")]
 
     # def on_after_startup(self):
     #     self._logger.info("Hello World!")
@@ -156,5 +153,5 @@ def __plugin_load__():
     global __plugin_hooks__
     __plugin_hooks__ = {
         "octoprint.plugin.softwareupdate.check_config": __plugin_implementation__.get_update_information,
-        "octoprint.comm.protocol.gcode.queuing": __plugin_implementation__.queuing_hook
+        "octoprint.comm.protocol.gcode.queuing": __plugin_implementation__.queuing_hook,
     }

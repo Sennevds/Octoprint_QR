@@ -24,7 +24,7 @@ $(function () {
         self.readQr = function () {
             self.spoolDialog.scanQr();
         };
-        
+
         self.update = function () {
             self.spoolDialog.updateSpools();
         };
@@ -38,10 +38,9 @@ $(function () {
             });
             self.customCamUrlVisible(!self.pluginSettings.useOctoprintCam());
             webcamUrl = null;
-            if(self.pluginSettings.useOctoprintCam()){
+            if (self.pluginSettings.useOctoprintCam()) {
                 webcamUrl = self.settingsViewModel.settings.webcam.streamUrl();
-            }
-            else{
+            } else {
                 webcamUrl = self.pluginSettings.customCamUrl();
             }
             self.spoolDialog.initBinding(self.apiClient, webcamUrl);
