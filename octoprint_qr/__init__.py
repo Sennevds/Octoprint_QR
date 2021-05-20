@@ -94,11 +94,10 @@ class QRPlugin(QrManagerAPI,
             qr=dict(
                 displayName="QR Plugin",
                 displayVersion=self._plugin_version,
-
                 # version check: github repository
                 type="github_release",
                 user="Sennevds",
-                repo="OctoPrint-QR",
+                repo="Octoprint_QR",
                 current=self._plugin_version,
 
                 # update method: pip
