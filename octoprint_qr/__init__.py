@@ -112,9 +112,9 @@ class QRPlugin(QrManagerAPI,
             dict(type="settings")
         ]
 
-    def on_after_startup(self):
-        self._logger.info("Hello World!")
-        self._logger.info(self._settings.global_get(["webcam", "stream"]))
+    # def on_after_startup(self):
+    #     self._logger.info("Hello World!")
+    #     self._logger.info(self._settings.global_get(["webcam", "stream"]))
 
     # def gcode_script_variables(self, comm, script_type, script_name, *args, **kwargs):
     #     if not script_type == "gcode" or not script_name == "beforePrintStarted":

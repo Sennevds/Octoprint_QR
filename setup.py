@@ -14,11 +14,11 @@ plugin_package = "octoprint_qr"
 plugin_name = "OctoPrint-QR"
 
 # The plugin's version. Can be overwritten within OctoPrint's internal data via __plugin_version__ in the plugin module
-plugin_version = "0.1.0"
+plugin_version = "0.2.0"
 
 # The plugin's description. Can be overwritten within OctoPrint's internal data via __plugin_description__ in the plugin
 # module
-plugin_description = """TODO"""
+plugin_description = "Use barcodes or QR codes to alter gcode files. By inserting Custom_Command into a gcode file you can dynamically add gcode commands when starting a print.\nCustom_Command will be replaced with the custom commands defined for the selected QR/Bar-code"
 
 # The plugin's author. Can be overwritten within OctoPrint's internal data via __plugin_author__ in the plugin module
 plugin_author = "Senne Vande Sompele"
