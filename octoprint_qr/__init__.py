@@ -101,7 +101,7 @@ class QRPlugin(QrManagerAPI,
                 current=self._plugin_version,
 
                 # update method: pip
-                pip="https://github.com/Sennevds/OctoPrint-QR/archive/{target_version}.zip"
+                pip="https://github.com/Sennevds/OctoPrint_QR/archive/{target_version}.zip"
             )
         )
 
