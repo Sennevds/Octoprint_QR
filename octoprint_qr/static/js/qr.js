@@ -13,7 +13,6 @@ $(function () {
         self.settingsViewModel = parameters[1];
         self.printerStateViewModel = parameters[2];
         self.filesViewModel = parameters[3];
-        self.pluginSettings = null;
         self.spoolDialog = new SpoolDialog();
         self.spoolDialog._createSpoolItemForEditing();
         self.customCamUrlVisible = ko.observable(false);
@@ -29,7 +28,6 @@ $(function () {
             self.spoolDialog.updateSpools();
         };
         self.onBeforeBinding = function () {
-            self.spoolDialog.initBinding(self.apiClient);
             self.pluginSettings =
                 self.settingsViewModel.settings.plugins[PLUGIN_ID];
             self.pluginSettings.useOctoprintCam.subscribe(function (
@@ -38,6 +36,13 @@ $(function () {
                 self.customCamUrlVisible(!newCheckedVaue);
             });
             self.customCamUrlVisible(!self.pluginSettings.useOctoprintCam());
+            if(self.pluginSettings.useOctoprintCam()){
+                webcamUrl = self.settingsViewModel.settings.webcam_streamUrl
+            }
+            else{
+                webcamUrl = self.pluginSettings.customCamUrl()
+            }
+            self.spoolDialog.initBinding(self.apiClient, webcamUrl);
         };
         self.showSpoolDialogAction = function (selectedSpoolItem) {
             self.spoolDialog.showDialog(selectedSpoolItem);

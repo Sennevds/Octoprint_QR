@@ -29,40 +29,45 @@
                     </h4>
                 </div>
             </div>
-            {# <div class="row">
-                <div class="span1">
-                    <input data-bind="value: spoolDialog.selectedSpool.displayName()"></input>
+        </div>
+        <div class="modal-body">
+            <form class="form-horizontal">
+                {# <div class="row">
+                    <div class="span1">
+                        <input data-bind="value: spoolDialog.selectedSpool.displayName()"></input>
+                    </div>
+                </div> #}
+                <div class="control-group">
+                    <label class="control-label">Display Name</label>
+                    <div class="row controls">
+                        <input data-bind="textInput: spoolDialog.selectedSpool.displayName()"  type="text" />
+                    </div>
                 </div>
-            </div> #}
-            <div class="control-group">
-                <label class="control-label">Display Name</label>
-                <div class="row controls">
-                    <input data-bind="textInput: spoolDialog.selectedSpool.displayName()"  type="text" />
+                <div class="control-group">
+                    <label class="control-label">GCODE</label>
+                    <div class="row controls">
+                        <textarea data-bind="textInput: spoolDialog.selectedSpool.gcodeText()"  type="text" ></textarea>
+                    </div>
                 </div>
-            </div>
-            <div class="control-group">
-                <label class="control-label">GCODE</label>
-                <div class="row controls">
-                    <textarea data-bind="textInput: spoolDialog.selectedSpool.gcodeText()"  type="text" ></textarea>
-                </div>
-            </div>
-            {# <div class="row">
-                <div class="span1">
-                    <textarea data-bind="value: spoolDialog.selectedSpool.gcodeText()"></textarea>
-                </div>
-            </div> #}
-            {# <div class="row">
-                <div class="span1">
-                    <input id="text" type="text" data-bind="numeric, value: spoolDialog.selectedSpool.spoolManagerId()">
-                </div>
-            </div> #}
-            <div class="row">
-                <div class="span1">
-                    <button class="btn" data-dismiss="modal" style="text-align:right">Close</button>
-                    <button class="btn" data-dismiss="modal" data-bind="click: spoolDialog.saveSpool" style="text-align:right">Save</button>
-                    <button class="btn" data-dismiss="modal" data-bind="click: spoolDialog.deleteSpool" style="text-align:right">Delete</button>
-                </div>
-            </div>
+                {# <div class="row">
+                    <div class="span1">
+                        <textarea data-bind="value: spoolDialog.selectedSpool.gcodeText()"></textarea>
+                    </div>
+                </div> #}
+                {# <div class="row">
+                    <div class="span1">
+                        <input id="text" type="text" data-bind="numeric, value: spoolDialog.selectedSpool.spoolManagerId()">
+                    </div>
+                </div> #}
+                
+                     
+               
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button class="btn" data-dismiss="modal" style="text-align:right">Close</button>
+            <button class="btn" data-dismiss="modal" data-bind="click: spoolDialog.saveSpool" style="text-align:right">Save</button>
+            <button class="btn" data-dismiss="modal" data-bind="click: spoolDialog.deleteSpool" style="text-align:right">Delete</button>
         </div>
     </div>
 </div>

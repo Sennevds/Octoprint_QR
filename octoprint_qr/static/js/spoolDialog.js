@@ -3,6 +3,7 @@ function SpoolDialog() {
     // self.componentFactory = new ComponentFactory();
     self.spoolDialog = null;
     self.apiClient = null;
+    self.webcamUrl = null;
     self.spools = ko.observableArray();
 
     var SpoolItem = function (spoolData) {
@@ -26,8 +27,9 @@ function SpoolDialog() {
         }
     };
     self.selectedSpool = new SpoolItem(null);
-    this.initBinding = function (apiClient) {
+    this.initBinding = function (apiClient, webcamUrl) {
         self.apiClient = apiClient;
+        self.webcamUrl = webcamUrl;
         self.spoolDialog = $("#dialog_qr_edit");
         self.apiClient.callGetAllSpools(function (responseData) {
             var allSpoolItems = ko.utils.arrayMap(
@@ -67,6 +69,7 @@ function SpoolDialog() {
             });
     };
     this.scanQr = function () {
+        
         self.apiClient.callLoadSpoolsByQuery(function (responseData) {
             var spoolItem = self.createSpoolItemForTable(responseData);
             self.selectedSpool.update(spoolItem);
