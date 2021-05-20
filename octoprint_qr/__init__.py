@@ -32,12 +32,19 @@ class QRPlugin(QrManagerAPI,
         sqlLoggingEnabled = False
         self._databaseManager = DatabaseManager(
             self._logger, sqlLoggingEnabled)
-        databaseSettings = DatabaseManager.DatabaseSettings()
+        databaseSettings = self._buildDatabaseSettingsFromPluginSettings()
 
         # init database
         self._databaseManager.initDatabase(
             databaseSettings, self._sendMessageToClient)
         self.selectedSpool = self.loadSelectedSpool()
+
+    def _buildDatabaseSettingsFromPluginSettings(self):
+        databaseSettings = DatabaseManager.DatabaseSettings()
+        pluginDataBaseFolder = self.get_plugin_data_folder()
+        databaseSettings.baseFolder = pluginDataBaseFolder
+        databaseSettings.fileLocation = self._databaseManager.buildDefaultDatabaseFileLocation(databaseSettings.baseFolder)
+        return databaseSettings
 
     def _sendDataToClient(self, payloadDict):
         self._plugin_manager.send_plugin_message(self._identifier,
