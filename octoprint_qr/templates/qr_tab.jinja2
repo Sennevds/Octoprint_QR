@@ -7,7 +7,7 @@
                 <th style="width: 15%" >Display Name</th>
                 <th style="width: 15%" >Code</th>
                 <th style="width: 24%" >Gcode</th>
-                <th style="width: 15%" >Spool Manager Id</th>
+                {# <th style="width: 15%" >Spool Manager Id</th> #}
             </tr>
         </thead>
         <tbody data-bind="foreach: spoolDialog.spools" >
@@ -15,39 +15,52 @@
             <td><span data-bind="text: displayName, attr: { title: code }"></span></td>
             <td><span data-bind="text: code, attr: { title: code }"></span></td>
             <td><span style="white-space: pre-line" data-bind="text: gcodeText, attr: { title: gcodeText }"></span></td>
-            <td><span data-bind="text: spoolManagerId, attr: { title: spoolManagerId }"></span></td>
+            {# <td><span data-bind="text: spoolManagerId, attr: { title: spoolManagerId }"></span></td> #}
             </tr>
         </tbody>
     </table>
     <div id="dialog_qr_edit" class="modal fade large">
         <div class="modal-header">
-            <h4 class="modal-title" data-bind="text: title"></h4>
+            <h2 class="modal-title" >Edit spool</h4>
             <div class="row">
                 <div class="span1">
-                    <label>
+                    <h4>
                         <span data-bind="text: spoolDialog.selectedSpool.code()"></span>
-                    </label>
+                    </h4>
                 </div>
             </div>
-            <div class="row">
+            {# <div class="row">
                 <div class="span1">
                     <input data-bind="value: spoolDialog.selectedSpool.displayName()"></input>
                 </div>
+            </div> #}
+            <div class="control-group">
+                <label class="control-label">Display Name</label>
+                <div class="row controls">
+                    <input data-bind="textInput: spoolDialog.selectedSpool.displayName()"  type="text" />
+                </div>
             </div>
-            <div class="row">
+            <div class="control-group">
+                <label class="control-label">GCODE</label>
+                <div class="row controls">
+                    <textarea data-bind="textInput: spoolDialog.selectedSpool.gcodeText()"  type="text" ></textarea>
+                </div>
+            </div>
+            {# <div class="row">
                 <div class="span1">
                     <textarea data-bind="value: spoolDialog.selectedSpool.gcodeText()"></textarea>
                 </div>
-            </div>
-            <div class="row">
+            </div> #}
+            {# <div class="row">
                 <div class="span1">
                     <input id="text" type="text" data-bind="numeric, value: spoolDialog.selectedSpool.spoolManagerId()">
                 </div>
-            </div>
+            </div> #}
             <div class="row">
                 <div class="span1">
                     <button class="btn" data-dismiss="modal" style="text-align:right">Close</button>
                     <button class="btn" data-dismiss="modal" data-bind="click: spoolDialog.saveSpool" style="text-align:right">Save</button>
+                    <button class="btn" data-dismiss="modal" data-bind="click: spoolDialog.deleteSpool" style="text-align:right">Delete</button>
                 </div>
             </div>
         </div>

@@ -21,7 +21,7 @@ function SpoolDialog() {
         this.databaseId(updateData.databaseId);
         this.displayName(updateData.displayName);
         this.spoolManagerId(updateData.spoolManagerId);
-        if (this.databaseId != null) {
+        if (this.databaseId() != null) {
             this.new(false);
         }
     };
@@ -115,6 +115,16 @@ function SpoolDialog() {
         self.apiClient.callSaveSpool(
             self.selectedSpool,
             function (allPrintJobsResponse) {
+                self.updateSpools();
+                self.spoolDialog.modal("hide");
+            }
+        );
+    };
+    this.deleteSpool = function () {
+        self.apiClient.callDeleteSpool(
+            self.selectedSpool.databaseId()(),
+            function (allPrintJobsResponse) {
+                self.updateSpools();
                 self.spoolDialog.modal("hide");
             }
         );

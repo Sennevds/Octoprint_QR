@@ -64,6 +64,14 @@ function QrAPIClient(pluginId, baseUrl){
             responseHandler();
         });
     }
+    this.callDeleteSpool = function (databaseId, responseHandler){
+        $.ajax({
+            url: this.baseUrl + "plugin/" + this.pluginId + "/deleteSpool/"+databaseId,
+            type: "DELETE"
+        }).always(function( data ){
+            responseHandler();
+        });
+    }
     this.callSelectQr = function(databaseId, responseHandler){
         if (databaseId == null){
             databaseId = -1;

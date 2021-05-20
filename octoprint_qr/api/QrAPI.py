@@ -169,6 +169,19 @@ class QrManagerAPI(octoprint.plugin.BlueprintPlugin):
         self._databaseManager.closeDatabase()
         return flask.jsonify()
 
+    @octoprint.plugin.BlueprintPlugin.route("/deleteSpool/<int:databaseId>", methods=["DELETE"])
+    def deleteSpool(self, databaseId):
+        self._logger.info("API delete spool")
+        self._databaseManager.connectoToDatabase()
+        if (databaseId is not None):
+            self._logger.info(
+                "Delete spool with database code '"+str(databaseId)+"'")
+            databaseId = self._databaseManager.deleteQr(databaseId, withReusedConnection=True)
+            self._databaseManager.closeDatabase()
+        else:
+            self._logger.error("database id can't be null!")
+        return flask.jsonify()
+
     @octoprint.plugin.BlueprintPlugin.route("/selectSpool", methods=["PUT"])
     def select_spool(self):
         self._logger.info("API Store selected spool")

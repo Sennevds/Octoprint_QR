@@ -457,6 +457,26 @@ class DatabaseManager(object):
 
         return self._handleReusableConnection(databaseCallMethode, withReusedConnection, "getSpools")
 
+    def deleteQr(self, databaseId, withReusedConnection=False):
+        def databaseCallMethode():
+            with self._database.atomic() as transaction:  # Opens new transaction.
+                try:
+                    deleteResult = QrModel.delete_by_id(databaseId)
+                    if (deleteResult == 0):
+                        return None
+                    return databaseId
+                    pass
+                except Exception as e:
+                    # Because this block of code is wrapped with "atomic", a
+                    # new transaction will begin automatically after the call
+                    # to rollback().
+                    transaction.rollback()
+                    self._logger.exception("Could not delete spool from database:" + str(e))
+
+                    self._passMessageToClient("Qr DatabaseManager", "Could not delete the spool ('"+ str(databaseId) +"') from the database. See OctoPrint.log for details!")
+                    return None
+        return self._handleReusableConnection(databaseCallMethode, withReusedConnection, "saveSpool")
+
     def saveQr(self, qrModel, withReusedConnection=False):
         def databaseCallMethode():
             with self._database.atomic() as transaction:  # Opens new transaction.
