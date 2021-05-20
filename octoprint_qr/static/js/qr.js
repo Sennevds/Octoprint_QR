@@ -37,11 +37,12 @@ $(function () {
                 self.customCamUrlVisible(!newCheckedVaue);
             });
             self.customCamUrlVisible(!self.pluginSettings.useOctoprintCam());
+            webcamUrl = null;
             if(self.pluginSettings.useOctoprintCam()){
-                webcamUrl = self.settingsViewModel.settings.webcam_streamUrl
+                webcamUrl = self.settingsViewModel.settings.webcam.streamUrl();
             }
             else{
-                webcamUrl = self.pluginSettings.customCamUrl()
+                webcamUrl = self.pluginSettings.customCamUrl();
             }
             self.spoolDialog.initBinding(self.apiClient, webcamUrl);
         };

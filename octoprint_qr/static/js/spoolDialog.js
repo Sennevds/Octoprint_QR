@@ -3,7 +3,7 @@ function SpoolDialog() {
     // self.componentFactory = new ComponentFactory();
     self.spoolDialog = null;
     self.apiClient = null;
-    self.webcamUrl = null;
+    self.webcamUrl = ko.observable();
     self.spools = ko.observableArray();
     self.showPopUp = function(popupType, popupTitle, message){
         var title = popupType.toUpperCase() + ": " + popupTitle;
@@ -41,8 +41,9 @@ function SpoolDialog() {
     self.selectedSpool = new SpoolItem(null);
     this.initBinding = function (apiClient, webcamUrl) {
         self.apiClient = apiClient;
-        self.webcamUrl = webcamUrl;
+        self.webcamUrl(webcamUrl);
         self.spoolDialog = $("#dialog_qr_edit");
+        self.scanDialog = $('#dialog_qr_scan');
         self.apiClient.callGetAllSpools(function (responseData) {
             var allSpoolItems = ko.utils.arrayMap(
                 responseData,
@@ -81,8 +82,21 @@ function SpoolDialog() {
             });
     };
     this.scanQr = function () {
-
+        self.scanDialog
+            .modal({
+                keyboard: false,
+                clickClose: true,
+                showClose: true,
+                backdrop: "static",
+            })
+            .css({
+                width: "auto",
+                "margin-left": function () {
+                    return -($(this).width() / 2);
+                },
+            });
         self.apiClient.callLoadSpoolsByQuery(function (responseData) {
+            self.scanDialog.modal("hide");
             var spoolItem = self.createSpoolItemForTable(responseData);
             self.selectedSpool.update(spoolItem);
             if (spoolItem.new() && spoolItem.code() != null) {
