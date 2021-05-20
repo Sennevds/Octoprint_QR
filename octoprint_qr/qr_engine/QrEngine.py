@@ -22,6 +22,8 @@ class QrEngine(octoprint.plugin.SettingsPlugin):
         barCode = None
         timeout = self._timeout
         timeout_start = time.time()
+        decodedObjects = None
+        im = None
         while(barCode is None and time.time() < timeout_start + timeout):
             # Capture frame-by-frame
             ret, frame = cap.read()

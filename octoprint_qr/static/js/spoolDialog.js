@@ -5,7 +5,19 @@ function SpoolDialog() {
     self.apiClient = null;
     self.webcamUrl = null;
     self.spools = ko.observableArray();
-
+    self.showPopUp = function(popupType, popupTitle, message){
+        var title = popupType.toUpperCase() + ": " + popupTitle;
+        var popupId = (title+message).replace(/([^a-z0-9]+)/gi, '-');
+        if($("."+popupId).length <1) {
+            new PNotify({
+                title: title,
+                text: message,
+                type: popupType,
+                hide: false,
+                addclass: popupId
+            });
+        }
+    };
     var SpoolItem = function (spoolData) {
         this.code = ko.observable();
         this.gcodeText = ko.observable();
@@ -69,11 +81,11 @@ function SpoolDialog() {
             });
     };
     this.scanQr = function () {
-        
+
         self.apiClient.callLoadSpoolsByQuery(function (responseData) {
             var spoolItem = self.createSpoolItemForTable(responseData);
             self.selectedSpool.update(spoolItem);
-            if (spoolItem.new()) {
+            if (spoolItem.new() && spoolItem.code() != null) {
                 self.spoolDialog
                     .modal({
                         keyboard: false,
@@ -87,7 +99,10 @@ function SpoolDialog() {
                             return -($(this).width() / 2);
                         },
                     });
-            } else {
+            }else if(spoolItem.code() == null){
+                self.showPopUp("error", 'Timeout', 'No code was found!');
+            }
+             else {
                 self.apiClient.callSelectQr(
                     spoolItem.databaseId,
                     function (responseData) {
@@ -97,6 +112,7 @@ function SpoolDialog() {
                         //     spoolItem = self.spoolDialog.createSpoolItemForTable(spoolData);
                         // }
                         // self.selectedSpoolForSidebar(spoolItem)
+                        self.showPopUp("info", 'Selected QR', 'Code: '+spoolItem.code()+' selected for printing');
                     }
                 );
             }

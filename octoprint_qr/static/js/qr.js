@@ -24,6 +24,7 @@ $(function () {
         self.readQr = function () {
             self.spoolDialog.scanQr();
         };
+        
         self.update = function () {
             self.spoolDialog.updateSpools();
         };
